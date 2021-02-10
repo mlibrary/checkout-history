@@ -9,7 +9,7 @@ class CreateLoans < ActiveRecord::Migration[6.1]
       t.datetime :checkout_date
       t.timestamps
     end
-    rename_column :loans, :uniqname_id, :uniqname
-    add_foreign_key :loans, :users, column: 'uniqname', primary_key: 'uniqname'
+    rename_column :loans, :uniqname_id, :user_uniqname
+    add_foreign_key :loans, :users, column: 'user_uniqname', primary_key: 'uniqname'
   end
 end

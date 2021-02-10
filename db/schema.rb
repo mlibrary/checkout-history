@@ -13,7 +13,7 @@
 ActiveRecord::Schema.define(version: 2021_02_09_194645) do
 
   create_table "loans", id: :string, charset: "utf8mb4", force: :cascade do |t|
-    t.string "uniqname", null: false
+    t.string "user_uniqname", null: false
     t.string "title"
     t.string "author"
     t.string "mms_id"
@@ -21,7 +21,7 @@ ActiveRecord::Schema.define(version: 2021_02_09_194645) do
     t.datetime "checkout_date"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["uniqname"], name: "index_loans_on_uniqname"
+    t.index ["user_uniqname"], name: "index_loans_on_user_uniqname"
   end
 
   create_table "users", primary_key: "uniqname", id: :string, charset: "utf8mb4", force: :cascade do |t|
@@ -31,5 +31,5 @@ ActiveRecord::Schema.define(version: 2021_02_09_194645) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  add_foreign_key "loans", "users", column: "uniqname", primary_key: "uniqname"
+  add_foreign_key "loans", "users", column: "user_uniqname", primary_key: "uniqname"
 end
