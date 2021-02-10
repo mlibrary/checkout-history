@@ -21,7 +21,6 @@ describe "put /v1/users/:uniqname {retain_history: false}" do
   it "changes a patron's loan retention status and confirmation status and deletes existing loans; returns updated user" do
     user = create(:user, retain_history: true, confirmed: false)
     loan = create(:loan, user: user)
-    byebug
     put "/v1/users/#{user.uniqname}", params: {:retain_history => false }
     expect(response).to redirect_to("/v1/users/#{user.uniqname}")
     updated_user = User.first 

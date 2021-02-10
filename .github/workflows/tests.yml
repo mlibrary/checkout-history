@@ -1,0 +1,40 @@
+name: Run Tests
+
+on: push
+
+jobs:
+  # Run tests
+  test:
+    runs-on: ubuntu-latest
+    env:
+      MYSQL_ROOT_PASSWORD: root
+      DATABASE_HOST: localhost
+    services:
+      database:
+        image: mariadb
+        ports:
+          - "3306"
+        env: 
+          MYSQL_ROOT_PASSWORD: mysqlrootpassword
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+    steps:
+      - uses: actions/checkout@v2
+      - name: start the mysql server
+        run: sudo /etc/init.d/mysql start
+      - name: Verify MySQL connection from host
+        run: |
+          sudo apt-get install -y mysql-client libmysqlclient-dev
+          mysql --host $DATABASE_HOST --port ${{ job.services.database.ports['3306'] }} -uroot -proot -e "SHOW DATABASES" 
+      - name: Set up Ruby 2.7.2
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.7.2
+          bundler-cache: true
+      - name: Create database
+        env:
+          DATABASE_PORT: ${{ job.services.database.ports['3306'] }}
+        run: bin/rails db:prepare
+      - name: Run tests
+        env:
+          DATABASE_PORT: ${{ job.services.database.ports['3306'] }}
+        run: bundle exec rspec
