@@ -1,8 +1,8 @@
 module V1
   class LoansController < ApplicationController
     def index
-      @loans = User.find(params[:user_uniqname]).loans
-      render json: @loans
+      @loans = LoansPresenter.new(user: User.find(params[:user_uniqname]))
+      #render json: @loans
     end
   end
 end
