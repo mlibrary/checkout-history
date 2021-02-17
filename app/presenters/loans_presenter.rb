@@ -5,9 +5,6 @@ class LoansPresenter
     @count = user.loans.all.count
   end
 
-  def to_a
-    @list
-  end
   def map(&block)
     @list.map do |l|
       block.call(l)

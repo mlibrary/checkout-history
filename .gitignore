@@ -29,3 +29,4 @@
 /.env/*
 .irb_history
 .rspec
+/coverage/*

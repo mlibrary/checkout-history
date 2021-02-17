@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :user do
-    uniqname { Faker::Internet.username(specifier: 3..8) }
+    uniqname { Faker::Internet.username(specifier: 3..8, separators: []) }
   end
   factory :loan do
     association :user, strategy: :build 

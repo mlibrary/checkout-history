@@ -1,3 +1,4 @@
+#:nocov:
 namespace :dev do
   desc "seeds db with development data"
   task :seed => :environment do
@@ -9,3 +10,4 @@ namespace :dev do
   end
   task :all => [:reset, :seed]
 end
+#:nocov:

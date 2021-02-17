@@ -9,6 +9,9 @@ jobs:
     env:
       MYSQL_ROOT_PASSWORD: root
       DATABASE_HOST: localhost
+      CIRC_REPORT_PATH: /circ/report/path
+      ALMA_API_KEY: 'YOUR_ALMA_API_KEY'
+      ALMA_API_HOST: 'https://api-na.hosted.exlibrisgroup.com'
     services:
       database:
         image: mariadb
