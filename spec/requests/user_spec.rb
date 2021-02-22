@@ -7,6 +7,18 @@ describe "get /v1/users/:uniqname/loans" do
     expect(response.body).to include(loan.title)
   end
 end
+describe "get /v1/users/:uniqname/loans/download" do
+  context "csv" do
+    it "returns a patrons full history as a csv download" do
+      loan = create(:loan)
+      get "/v1/users/#{loan.user_uniqname}/loans/download.csv"
+      expect(response.body).to include("mms_id")
+      expect(response.body).to include(loan.mms_id)
+      expect(response.headers["Content-Type"]).to eq("text/csv")
+      expect(response.headers["Content-Disposition"]).to include("filename=\"#{loan.user_uniqname}_circ_history_#{Date.today}.csv\"")
+    end
+  end
+end
 describe "get /v1/users/:uniqname" do
   it "shows a patron's loan retention status and confirmation status" do
     user = create(:user)
