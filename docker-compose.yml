@@ -4,14 +4,21 @@ services:
   web:
     build: .
     ports:
-      - "3000:3000"
+      - "8000:3000"
     volumes:
       - .:/app
       - gem_cache:/gems
     env_file:
       - .env/web
       - .env/database
-        
+
+  falma:
+    build: ./fake_alma/.
+    ports:
+      - "4444:4567"
+    volumes:
+      - ./fake_alma/.:/app
+
   database:
     image: mariadb
     ports:
@@ -20,7 +27,38 @@ services:
       - .env/database
     volumes:
       - db_data:/var/lib/mysql
+  
+  promtail:
+    image: grafana/promtail
+    ports:
+      - "9080:9080"
+    volumes: 
+      - ./log/development.log:/development.log
+      - ./config/promtail.yml:/promtail.yml
+    command: -config.file=/promtail.yml
+    
+  grafana:
+    image: grafana/grafana:7.1.1
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./.env/grafana.ini:/etc/grafana/grafana.ini
+      - grafana_storage:/var/lib/grafana
+  
+  loki:
+    image: grafana/loki:master
+    ports:
+      - "3100:3100"
+    command: -config.file=/etc/loki/local-config.yaml
+    
+  prometheus:
+    image: prom/prometheus
+    ports: 
+      - "9090:9090"
+    volumes:
+      - ./config/prometheus.yml:/etc/prometheus/prometheus.yml
 
 volumes:
   gem_cache:
   db_data:
+  grafana_storage:
