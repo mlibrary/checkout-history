@@ -30,3 +30,6 @@
 .irb_history
 .rspec
 /coverage/*
+lib/tasks/aleph_circ_hist.tsv
+
+.bash_history
