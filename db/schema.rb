@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_09_194645) do
+ActiveRecord::Schema.define(version: 2021_03_15_153447) do
 
   create_table "loans", id: :string, charset: "utf8mb4", force: :cascade do |t|
     t.string "user_uniqname", null: false
@@ -21,6 +21,8 @@ ActiveRecord::Schema.define(version: 2021_02_09_194645) do
     t.datetime "checkout_date"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "barcode"
+    t.string "call_number"
     t.index ["user_uniqname"], name: "index_loans_on_user_uniqname"
   end
 
@@ -29,6 +31,7 @@ ActiveRecord::Schema.define(version: 2021_02_09_194645) do
     t.boolean "confirmed", default: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.boolean "active"
   end
 
   add_foreign_key "loans", "users", column: "user_uniqname", primary_key: "uniqname"
