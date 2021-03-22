@@ -1,5 +1,4 @@
 require 'rails_helper'
-Rails.application.load_tasks
 
 describe "alma_circ_history:load_history" do
   before(:each) do
@@ -16,7 +15,8 @@ describe "alma_circ_history:load_history" do
   let(:load_circ_history){ Rake::Task["alma_circ_history:load"].invoke }
 
   it "calls alma for latest circ history report" do
-    load_circ_history
+    #load_circ_history
+    Rake::Task["alma_circ_history:load"].invoke
     expect(@stub).to have_been_requested.times(1)
   end
   it "loads new circ history into the db and downcases uniqnames" do

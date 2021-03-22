@@ -5,6 +5,10 @@ require 'simplecov'
 SimpleCov.start
 ENV['RAILS_ENV'] ||= 'test'
 require File.expand_path('../config/environment', __dir__)
+
+#for testing rake tasks 
+Rails.application.load_tasks
+
 # Prevent database truncation if the environment is production
 abort("The Rails environment is running in production mode!") if Rails.env.production?
 require 'rspec/rails'

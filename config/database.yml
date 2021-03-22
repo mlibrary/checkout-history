@@ -16,7 +16,7 @@ default: &default
   username: root
   password: <%= ENV.fetch("MYSQL_ROOT_PASSWORD") %>
   host: <%= ENV.fetch("DATABASE_HOST") %>
-  port: <%= ENV.fetch("DATABSE_PORT", 3306) %>
+  port: <%= ENV.fetch("DATABASE_PORT", 3306) %>
 
 development:
   <<: *default

@@ -41,6 +41,7 @@ module CirculationHistory
     config.rails_semantic_logger.processing = true
     config.rails_semantic_logger.rendered   = true
     config.colorize_logging = false
+    config.time_zone = 'Eastern Time (US & Canada)'
     
 
   end
