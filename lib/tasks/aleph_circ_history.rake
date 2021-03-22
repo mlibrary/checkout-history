@@ -21,7 +21,7 @@ namespace :aleph_circ_history do
           l.checkout_date = row["#Check_out_date_time"]
           l.barcode = row["Item_barcode"]
           l.call_number = row["Call_Number"]
-          #l.volume_description = row["Volume_description"]
+          l.description = row["Volume_description"]
         end
         unless loan.save
           Rails.logger.warn("item_loan '#{loan.id}' not saved: #{loan.errors.full_messages}")

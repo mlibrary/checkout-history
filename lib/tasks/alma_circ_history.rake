@@ -26,6 +26,9 @@ namespace :alma_circ_history do
           l.mms_id = row["MMS Id"]
           l.return_date = row["Return Date"]
           l.checkout_date = row["Loan Date"]
+          l.barcode = row["Barcode"]
+          l.call_number = row["Call Number"]
+          l.description = row["Description"]
         end
         if loan.save
           Rails.logger.info("item_loan '#{loan.id}' saved")
