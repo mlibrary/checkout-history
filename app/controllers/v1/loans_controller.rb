@@ -1,7 +1,9 @@
 module V1
   class LoansController < ApplicationController
     def index
-      @loans = LoansPresenter.new(user: User.find(params[:user_uniqname]))
+      @loans = LoansPresenter.new(user: User.find(params[:user_uniqname]), 
+                                  limit: params[:limit], offset: params[:offset],
+                                  order_by: params[:order_by], direction: params[:direction])
       #render json: @loans
     end
     def download

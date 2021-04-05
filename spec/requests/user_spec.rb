@@ -6,6 +6,36 @@ describe "get /v1/users/:uniqname/loans" do
     expect(response).to have_http_status(:success)
     expect(response.body).to include(loan.title)
   end
+  context "pagination params" do
+    before(:each) do
+      @user = create(:user)
+      @loan1 = create(:loan, user: @user, checkout_date: 3.days.ago)
+      @loan2 = create(:loan, user: @user, checkout_date: 1.day.ago)
+    end
+    it "works with limit" do
+      get "/v1/users/#{@user.uniqname}/loans", params: {limit: 1}
+      loans = JSON.parse(response.body)["loans"]
+      expect(loans.count).to eq(1)
+      expect(loans.first["title"]).to eq(@loan1.title)
+    end
+    it "works with offset" do
+      get "/v1/users/#{@user.uniqname}/loans", params: {limit: 1, offset: 1}
+      loans = JSON.parse(response.body)["loans"]
+      expect(loans.count).to eq(1)
+      expect(loans.first["title"]).to eq(@loan2.title)
+    end
+    it "handles sorting" do
+      @loan1.update(title: 'ZZZZ')
+      @loan2.update(title: 'AAAA')
+      loan3 = create(:loan, user: @user, title: 'BBBB')
+      get "/v1/users/#{@user.uniqname}/loans", params: {order_by: 'title'}
+      loans = JSON.parse(response.body)["loans"]
+      expect(loans[0]["title"]).to eq('AAAA')
+      expect(loans[1]["title"]).to eq('BBBB')
+      expect(loans[2]["title"]).to eq('ZZZZ')
+    end
+  end
+  
 end
 describe "get /v1/users/:uniqname/loans/download" do
   context "csv" do

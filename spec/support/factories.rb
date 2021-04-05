@@ -8,10 +8,15 @@ FactoryBot.define do
     title { Faker::Book.title }
     author { Faker::Book.author }
     mms_id { "99#{Faker::Number.number(digits: 12)}6000" }
-    return_date { Faker::Date.backward(days: 365)}
     before(:create) do |loan| 
-      returned = loan.return_date
-      loan.checkout_date = Faker::Date.between(from: returned - 180.days, to: returned)
+      if loan.checkout_date.nil?
+        loan.return_date = Faker::Date.backward(days: 365)
+        loan.checkout_date = Faker::Date.between(from: loan.return_date - 180.days, 
+                                                 to: loan.return_date)
+      else
+        loan.return_date = Faker::Date.between(from: loan.checkout_date, to: DateTime.now)
+      end
+
     end
   end
 end
