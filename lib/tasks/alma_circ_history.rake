@@ -5,7 +5,6 @@ namespace :alma_circ_history do
     Rails.logger.tagged('Circ Load') do
       Rails.logger.info('Started')
       client = AlmaRestClient.client
-      puts "hiya"
       response = client.get_report(path: ENV.fetch('CIRC_REPORT_PATH'))
       if response.code != 200
         Rails.logger.error('Alma Report Failed to Load')

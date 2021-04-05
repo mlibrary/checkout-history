@@ -20,6 +20,11 @@ describe "get /v1/users/:uniqname/loans/download" do
   end
 end
 describe "get /v1/users/:uniqname" do
+  it "handle patron with email address uniqname" do
+    user = create(:user, uniqname: 'so.and.so@example.com')
+    get "/v1/users/#{CGI.escape(user.uniqname)}"
+    expect(response).to have_http_status(:success)
+  end
   it "shows a patron's loan retention status and confirmation status" do
     user = create(:user)
     get "/v1/users/#{user.uniqname}"
