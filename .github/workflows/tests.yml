@@ -6,38 +6,51 @@ jobs:
   # Run tests
   test:
     runs-on: ubuntu-latest
-    env:
-      MYSQL_ROOT_PASSWORD: root
-      DATABASE_HOST: localhost
-      CIRC_REPORT_PATH: /circ/report/path
-      ALMA_API_KEY: 'YOUR_ALMA_API_KEY'
-      ALMA_API_HOST: 'https://api-na.hosted.exlibrisgroup.com'
-    services:
-      database:
-        image: mariadb
-        ports:
-          - "3306"
-        env: 
-          MYSQL_ROOT_PASSWORD: mysqlrootpassword
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
     steps:
       - uses: actions/checkout@v2
-      - name: start the mysql server
-        run: sudo /etc/init.d/mysql start
-      - name: Verify MySQL connection from host
-        run: |
-          sudo apt-get install -y mysql-client libmysqlclient-dev
-          mysql --host $DATABASE_HOST --port ${{ job.services.database.ports['3306'] }} -uroot -proot -e "SHOW DATABASES" 
-      - name: Set up Ruby 2.7.2
-        uses: ruby/setup-ruby@v1
+
+      - name: Cache ruby gems
+        uses: actions/cache@v2
+        env:
+          cache-name: ruby-gems
         with:
-          ruby-version: 2.7.2
-          bundler-cache: true
-      - name: Create database
-        env:
-          DATABASE_PORT: ${{ job.services.database.ports['3306'] }}
-        run: bin/rails db:prepare
+          path: .gems
+          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-gems-
+
+      - uses: satackey/action-docker-layer-caching@v0.0.11
+        # Ignore the failure of a step and avoid terminating the job.
+        continue-on-error: true
+
+      - name: make coverage directory
+        run: mkdir -m777 coverage 
+      - name: make tmp directory writeable
+        run: chmod -R 777 tmp
+      - name: make fixtures writeable
+        run: chmod -R 777 spec/fixtures
+      - name: make app/log/development.log writeable
+        run: |
+          mkdir -m777 log
+          touch log/development.log
+          chmod 777 log/development.log
+      - name: list files with permissions
+        run: |
+          ls -al
+          ls -al log
+      - name: Set up tests
+        run: |
+          docker-compose -f docker-compose.test.yml build
+          docker-compose -f docker-compose.test.yml run web bundle install
+      - name: boot up database
+        run: docker-compose -f docker-compose.test.yml up -d database
+      - name: docker state
+        run: docker-compose -f docker-compose.test.yml ps
+      - name: create databases
+        run: docker-compose -f docker-compose.test.yml run web bundle exec rails db:create
+
       - name: Run tests
-        env:
-          DATABASE_PORT: ${{ job.services.database.ports['3306'] }}
-        run: bundle exec rspec
+        run: docker-compose -f docker-compose.test.yml run web bundle exec rspec
+
+

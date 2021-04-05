@@ -12,13 +12,6 @@ services:
       - .env/web
       - .env/database
 
-  falma:
-    build: ./fake_alma/.
-    ports:
-      - "4444:4567"
-    volumes:
-      - ./fake_alma/.:/app
-
   database:
     image: mariadb
     ports:
@@ -27,6 +20,14 @@ services:
       - .env/database
     volumes:
       - db_data:/var/lib/mysql
+
+  falma:
+    build: ./fake_alma/.
+    ports:
+      - "4444:4567"
+    volumes:
+      - ./fake_alma/.:/app
+
   
   promtail:
     image: grafana/promtail
