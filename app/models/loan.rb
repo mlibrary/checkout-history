@@ -3,7 +3,7 @@ class Loan < ApplicationRecord
   belongs_to :user, foreign_key: 'user_uniqname'
 
   def self.to_csv
-    attributes = %w{mms_id title author checkout_date return_date}
+    attributes = %w{mms_id title author description call_number barcode checkout_date return_date}
     CSV.generate(headers: true) do |csv|
       csv << attributes
 
