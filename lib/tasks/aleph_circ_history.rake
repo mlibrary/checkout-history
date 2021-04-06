@@ -6,11 +6,7 @@ namespace :aleph_circ_history do
     Rails.logger.tagged('Aleph Circ Load') do
       Rails.logger.info('Started')
       CSV.foreach(args[:path], headers: true, col_sep: "\t" ) do |row|
-        u = User.find_or_create_by(uniqname: row["Uniqname"]) do |user|
-          user.retain_history = true
-          user.confirmed = false
-          user.active = true
-        end
+        u = User.find_or_create_by_uniqname(row["Uniqname"])
         loan = Loan.new do |l|
           l.user = u
           l.id = SecureRandom.alphanumeric(16)

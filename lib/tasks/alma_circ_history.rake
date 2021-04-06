@@ -10,12 +10,7 @@ namespace :alma_circ_history do
         Rails.logger.error('Alma Report Failed to Load')
       end
       response.parsed_response.each do |row|
-        begin
-          u = User.find(row["Primary Identifier"].downcase)
-        rescue
-          Rails.logger.error("Uniqname not found: #{row["Primary Identifier"].downcase}")
-          next
-        end
+        u = User.find_or_create_by_uniqname(row["Primary Identifier"])
         next unless u.retain_history
         loan = Loan.new do |l|
           l.user = u
@@ -38,9 +33,4 @@ namespace :alma_circ_history do
       Rails.logger.info('Finished')
     end
   end
-  #task :test => :environment do
-    #Rails.logger.tagged('testytest').info("????")
-    #puts "hiya"
-  #end
-  #task :all => [:load, :notify]
 end

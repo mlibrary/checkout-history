@@ -8,6 +8,13 @@ class User < ApplicationRecord
   def loans_page(limit: 10, offset: 0)
     loans.limit(limit).offset(offset)
   end
+  def self.find_or_create_by_uniqname(uniqname)
+    self.find_or_create_by(uniqname: uniqname.downcase) do |u|
+      u.retain_history = true
+      u.confirmed = false
+      u.active = true
+    end
+  end
   private
   def purge_loans_if_opt_out
     if !retain_history

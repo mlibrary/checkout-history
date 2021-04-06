@@ -36,11 +36,11 @@ describe "alma_circ_history:load_history" do
     expect(Loan.find(loan.id).title).to eq('my_title')
   end
 
-  it "it does not add a new user if a user doesn't exist" do
+  it "it adds user if they don't exist" do
     user_ajones
     load_circ_history
-    expect(Loan.all.count).to eq(1)
-    expect(User.all.count).to eq(1)
+    expect(Loan.all.count).to eq(2)
+    expect(User.all.count).to eq(2)
   end
   it "skips over users who have opted-out" do
     user_ajones.update(retain_history: false)

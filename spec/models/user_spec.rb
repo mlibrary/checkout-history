@@ -13,6 +13,12 @@ RSpec.describe User, type: :model do
       expect(@user.loans_page(limit: 2, offset: 0).count).to eq(2)
     end
   end
+  context ".find_or_create_by_uniqname" do
+    it "downcases uniqname" do
+      user = User.find_or_create_by_uniqname('SOANDSO')
+      expect(user.uniqname).to eq('soandso')
+    end
+  end
   context "after setting retain history" do
     it "to false purges items from the history" do
       user = create(:user, retain_history: true)

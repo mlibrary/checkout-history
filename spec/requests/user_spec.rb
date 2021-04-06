@@ -6,6 +6,16 @@ describe "get /v1/users/:uniqname/loans" do
     expect(response).to have_http_status(:success)
     expect(response.body).to include(loan.title)
   end
+  it "creates a patron if one doesn't exist" do
+    get "/v1/users/soandso/loans"
+    expect(response).to have_http_status(:success)
+    expect(response.body).to eq({loans: [], total_record_count: 0}.to_json)
+    user = User.first
+    expect(user.uniqname).to eq('soandso')
+    expect(user.active).to eq(true)
+    expect(user.confirmed).to eq(false)
+    expect(user.retain_history).to eq(true)
+  end
   context "pagination params" do
     before(:each) do
       @user = create(:user)
@@ -47,6 +57,10 @@ describe "get /v1/users/:uniqname/loans/download" do
       expect(response.headers["Content-Type"]).to eq("text/csv")
       expect(response.headers["Content-Disposition"]).to include("filename=\"#{loan.user_uniqname}_circ_history_#{Date.today}.csv\"")
     end
+    it "creates a new user if one doesn't exist" do
+      get "/v1/users/soandso/loans/download.csv"
+      expect(User.first.uniqname).to eq('soandso')
+    end
   end
 end
 describe "get /v1/users/:uniqname" do
@@ -62,6 +76,10 @@ describe "get /v1/users/:uniqname" do
     expect(response.body).to include('retain_history')
     expect(response.body).to include('confirmed')
     expect(response.body).to include(user.uniqname)
+  end
+  it "creates a new user if one doesn't exist" do
+    get "/v1/users/soandso"
+    expect(User.first.uniqname).to eq('soandso')
   end
 end
 describe "put /v1/users/:uniqname {retain_history: false}" do
