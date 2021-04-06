@@ -2,7 +2,6 @@ class User < ApplicationRecord
   has_many :loans, primary_key: 'uniqname', foreign_key: 'user_uniqname'
 
   before_update :set_confirmed
-  before_update :set_active
   before_update :purge_loans_if_opt_out
 
   def loans_page(limit: 10, offset: 0)
@@ -12,7 +11,6 @@ class User < ApplicationRecord
     self.find_or_create_by(uniqname: uniqname.downcase) do |u|
       u.retain_history = true
       u.confirmed = false
-      u.active = true
     end
   end
   private
@@ -23,8 +21,5 @@ class User < ApplicationRecord
   end
   def set_confirmed
     self.confirmed = true
-  end
-  def set_active
-    self.active = true if self.confirmed == true
   end
 end

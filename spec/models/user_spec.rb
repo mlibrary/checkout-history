@@ -42,11 +42,4 @@ RSpec.describe User, type: :model do
       expect(User.first.loans.count).to eq(5)
     end
   end
-  context "after afirming the confirmation status" do
-    it "sets active to true when confirmed is set to true" do
-      user = create(:user, active: false, confirmed: false)
-      user.update(confirmed: true)
-      expect(User.first.active).to eq(true)
-    end
-  end
 end

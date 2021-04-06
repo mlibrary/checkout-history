@@ -12,7 +12,6 @@ describe "get /v1/users/:uniqname/loans" do
     expect(response.body).to eq({loans: [], total_record_count: 0}.to_json)
     user = User.first
     expect(user.uniqname).to eq('soandso')
-    expect(user.active).to eq(true)
     expect(user.confirmed).to eq(false)
     expect(user.retain_history).to eq(true)
   end
