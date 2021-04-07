@@ -1,4 +1,3 @@
-require 'alma_rest_client'
 require 'securerandom'
 namespace :aleph_circ_history do
   desc "retrieves and loads latest circ history"
@@ -6,7 +5,7 @@ namespace :aleph_circ_history do
     Rails.logger.tagged('Aleph Circ Load') do
       Rails.logger.info('Started')
       CSV.foreach(args[:path], headers: true, col_sep: "\t" ) do |row|
-        u = User.find_or_create_by_uniqname(row["Uniqname"])
+        u = User.find_or_create_by_uniqname(row["Uniqname"], true) #default keep history for old users
         loan = Loan.new do |l|
           l.user = u
           l.id = SecureRandom.alphanumeric(16)
@@ -23,41 +22,7 @@ namespace :aleph_circ_history do
           Rails.logger.warn("item_loan '#{loan.id}' not saved: #{loan.errors.full_messages}")
         end
       end
-      #client = AlmaRestClient.client
-      #puts "hiya"
-      #response = client.get_report(path: ENV.fetch('CIRC_REPORT_PATH'))
-      #if response.code != 200
-        #Rails.logger.error('Alma Report Failed to Load')
-      #end
-      #response.parsed_response.each do |row|
-        #begin
-          #u = User.find(row["Primary Identifier"].downcase)
-        #rescue
-          #Rails.logger.error("Uniqname not found: #{row["Primary Identifier"].downcase}")
-          #next
-        #end
-        #next unless u.retain_history
-        #loan = Loan.new do |l|
-          #l.user = u
-          #l.id = row["Item Loan Id"]
-          #l.title = row["Title"]
-          #l.author = row["Author"]
-          #l.mms_id = row["MMS Id"]
-          #l.return_date = row["Return Date"]
-          #l.checkout_date = row["Loan Date"]
-        #end
-        #if loan.save
-          #Rails.logger.info("item_loan '#{loan.id}' saved")
-        #else
-          #Rails.logger.warn("item_loan '#{loan.id}' not saved: #{loan.errors.full_messages}")
-        #end
-      #end
       Rails.logger.info('Finished')
     end
   end
-  #task :test => :environment do
-    #Rails.logger.tagged('testytest').info("????")
-    #puts "hiya"
-  #end
-  #task :all => [:load, :notify]
 end

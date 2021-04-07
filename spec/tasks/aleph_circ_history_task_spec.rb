@@ -25,6 +25,7 @@ describe "aleph_circ_history:load_history" do
     load_circ_history.call(circ_fixture)
     expect(User.count).to eq(1)
     expect(User.first.uniqname).to eq('emcard')
+    expect(User.first.retain_history).to eq(true)
   end
   it "adds appropriate loan data" do
     expect(Loan.count).to eq(0)

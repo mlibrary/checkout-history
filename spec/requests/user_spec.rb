@@ -13,7 +13,7 @@ describe "get /v1/users/:uniqname/loans" do
     user = User.first
     expect(user.uniqname).to eq('soandso')
     expect(user.confirmed).to eq(false)
-    expect(user.retain_history).to eq(true)
+    expect(user.retain_history).to eq(false) #have to opt-in to retaining history
   end
   context "pagination params" do
     before(:each) do

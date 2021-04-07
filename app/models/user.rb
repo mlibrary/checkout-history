@@ -7,9 +7,9 @@ class User < ApplicationRecord
   def loans_page(limit: 10, offset: 0)
     loans.limit(limit).offset(offset)
   end
-  def self.find_or_create_by_uniqname(uniqname)
+  def self.find_or_create_by_uniqname(uniqname, retain_history=false)
     self.find_or_create_by(uniqname: uniqname.downcase) do |u|
-      u.retain_history = true
+      u.retain_history = retain_history
       u.confirmed = false
     end
   end

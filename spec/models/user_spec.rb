@@ -31,7 +31,7 @@ RSpec.describe User, type: :model do
       expect(User.first.loans.count).to eq(0)
     end
     it "to true it does not purge items from the history" do
-      #example of migrated patron with circ history and default to false retain_history
+      #from false to true; not something that should happen. 
       user = create(:user, retain_history: false) 
       loans = []
       (1..5).each do
