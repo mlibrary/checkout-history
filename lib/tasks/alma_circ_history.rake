@@ -8,6 +8,7 @@ namespace :alma_circ_history do
       response = client.get_report(path: ENV.fetch('CIRC_REPORT_PATH'))
       if response.code != 200
         Rails.logger.error('Alma Report Failed to Load')
+        next
       end
       response.parsed_response.each do |row|
         u = User.find_or_create_by_uniqname(row["Primary Identifier"])
@@ -28,6 +29,28 @@ namespace :alma_circ_history do
           Rails.logger.info("item_loan '#{loan.id}' saved")
         else
           Rails.logger.warn("item_loan '#{loan.id}' not saved: #{loan.errors.full_messages}")
+        end
+      end
+      Rails.logger.info('Finished')
+    end
+  end
+  task :purge => :environment do
+    Rails.logger.tagged('Purge Expired Users') do
+      Rails.logger.info('Started')
+      client = AlmaRestClient.client
+      response = client.get_report(path: ENV.fetch('PATRON_REPORT_PATH'))
+      if response.code != 200
+        Rails.logger.error('Alma Report Failed to Load')
+        next
+      end
+      non_expired_users = response.parsed_response.map { |row| row["Primary Identifier"].downcase }
+      User.all.each do |user|
+        uniqname = user.uniqname
+        if non_expired_users.include?(uniqname)
+          Rails.logger.info('Retained User: #{uniqname}')
+        else
+          user.destroy
+          Rails.logger.info('Deleted User: #{uniqname}')
         end
       end
       Rails.logger.info('Finished')

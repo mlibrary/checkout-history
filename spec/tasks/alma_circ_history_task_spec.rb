@@ -15,9 +15,14 @@ describe "alma_circ_history:load_history" do
   let(:load_circ_history){ Rake::Task["alma_circ_history:load"].invoke }
 
   it "calls alma for latest circ history report" do
-    #load_circ_history
-    Rake::Task["alma_circ_history:load"].invoke
+    load_circ_history
     expect(@stub).to have_been_requested.times(1)
+  end
+  it "logs an error if it can't load the report" do 
+    @stub.to_return(body: File.read('./spec/fixtures/alma_error.json'), status: 500, headers: {content_type: 'application/json'})   
+    @stub.response #clear out original response 
+    expect(Rails.logger).to receive(:error).with('Alma Report Failed to Load')
+    load_circ_history
   end
   it "loads new circ history into the db and downcases uniqnames" do
     user_ajones
@@ -50,4 +55,35 @@ describe "alma_circ_history:load_history" do
     expect(Loan.all.count).to eq(1)
   end
   
+end
+describe "alma_circ_history:purge" do
+  before(:each) do
+    @stub = stub_alma_get_request(url: 'analytics/reports', 
+      query: {path: ENV.fetch('PATRON_REPORT_PATH'), col_names: true, limit: 1000}, 
+      body: File.read('./spec/fixtures/non_expired_patrons.json') )
+  end
+  after(:each) do
+    Rake::Task["alma_circ_history:purge"].reenable
+  end
+  let(:user_ajones) { create(:user, uniqname: 'ajones', retain_history: true) }
+  let(:user_emcard) { create(:user, uniqname: 'emcard', retain_history: true) }
+  let(:purge_users){ Rake::Task["alma_circ_history:purge"].invoke }
+  it "purges users not in the report" do 
+    emcard = user_emcard
+    ajones = user_ajones
+    create(:loan, user: emcard)
+    create(:loan, user: ajones)
+    expect(Loan.count).to eq(2)
+    expect(User.count).to eq(2)
+    purge_users #Report only has user with uniqname: 'EMCARD'
+    expect(Loan.count).to eq(1)
+    expect(Loan.first.user_uniqname).to eq('emcard')
+    expect(User.first.uniqname).to eq('emcard')
+  end
+  it "logs an error if it can't load the report" do 
+    @stub.to_return(body: File.read('./spec/fixtures/alma_error.json'), status: 500, headers: {content_type: 'application/json'})   
+    @stub.response #clear out original response 
+    expect(Rails.logger).to receive(:error).with('Alma Report Failed to Load')
+    purge_users
+  end
 end
