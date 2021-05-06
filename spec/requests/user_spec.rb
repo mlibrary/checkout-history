@@ -109,17 +109,27 @@ describe "get /v1/users/:uniqname" do
   end
 end
 describe "put /v1/users/:uniqname {retain_history: false}" do
-  before(:each) do
-    authorize
+  context "authorized" do
+    before(:each) do
+      authorize
+    end
+    it "changes a patron's loan retention status and confirmation status and deletes existing loans; returns updated user" do
+      user = create(:user, retain_history: true, confirmed: false)
+      loan = create(:loan, user: user)
+      put "/v1/users/#{user.uniqname}", params: {:retain_history => false }
+      expect(response).to redirect_to("/v1/users/#{user.uniqname}")
+      updated_user = User.first 
+      expect(updated_user.retain_history).to be_falsey
+      expect(updated_user.confirmed).to be_truthy
+      expect(Loan.all.count).to eq(0)
+    end
   end
-  it "changes a patron's loan retention status and confirmation status and deletes existing loans; returns updated user" do
-    user = create(:user, retain_history: true, confirmed: false)
-    loan = create(:loan, user: user)
-    put "/v1/users/#{user.uniqname}", params: {:retain_history => false }
-    expect(response).to redirect_to("/v1/users/#{user.uniqname}")
-    updated_user = User.first 
-    expect(updated_user.retain_history).to be_falsey
-    expect(updated_user.confirmed).to be_truthy
-    expect(Loan.all.count).to eq(0)
+  context "unauthorized" do
+    it "returns unauthorized" do
+      user = create(:user, retain_history: true, confirmed: false)
+      loan = create(:loan, user: user)
+      put "/v1/users/#{user.uniqname}", params: {:retain_history => false }
+      expect(response).to have_http_status(:unauthorized)
+    end
   end
 end
