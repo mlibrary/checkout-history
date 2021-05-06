@@ -10,7 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_06_205544) do
+ActiveRecord::Schema.define(version: 2021_05_06_133110) do
+
+  create_table "auth_tokens", charset: "utf8mb4", force: :cascade do |t|
+    t.string "token"
+    t.string "name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
 
   create_table "loans", id: :string, charset: "utf8mb4", force: :cascade do |t|
     t.string "user_uniqname", null: false
