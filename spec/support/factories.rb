@@ -1,7 +1,6 @@
 FactoryBot.define do
   factory :auth_token do
     name { Faker::Internet.slug }
-    token { Faker::Alphanumeric.alphanumeric(number:36) }
   end
   factory :user do
     uniqname { Faker::Internet.username(specifier: 3..8, separators: []) }

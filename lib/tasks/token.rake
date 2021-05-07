@@ -2,10 +2,7 @@ require 'securerandom'
 namespace :token do
   desc "generates a new token with associated name"
   task :generate, [:name] => :environment do |t, args|
-    a = AuthToken.new do |t|
-      t.token = SecureRandom.alphanumeric(36)
-      t.name = args[:name]
-    end
+    a = AuthToken.new(name: args[:name])
     unless (a.save)
       puts "Errors: #{a.errors.full_messages.join('; ')}"
     else
@@ -18,9 +15,7 @@ namespace :token do
     if a.nil?
       puts "Error: app: '#{args[:name]}' does not exist"
     else
-      a.token = SecureRandom.alphanumeric(36)
-      a.save
-      unless (a.save)
+      unless (a.regenerate_token)
         puts "Errors: #{a.errors.full_messages.join('; ')}"
       else
         puts "token: #{a.token} for app: #{a.name}"

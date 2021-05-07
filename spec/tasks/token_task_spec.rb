@@ -38,8 +38,12 @@ describe "token:regenerate" do
     subject
     expect(AuthToken.first.token).not_to eq(old_token)
   end
-  it "displays the new token" do
+  it "displays a token" do
     expect{subject}.to  output(/token: [[:alnum:]]{36} for app: app_name/).to_stdout
+  end
+  it "does not display the old token" do
+    old_token = AuthToken.first.token
+    expect{subject}.not_to  output("token: #{old_token} for app: app_name").to_stdout
   end
   it "has name that's given as parameter" do
     subject
