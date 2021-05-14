@@ -25,6 +25,9 @@
             ) +
             container.withPorts(containerPort.new("web", 3000)) +
             container.withEnvMixin([
+              envVar.withName("RAILS_ENV") +
+              envVar.withValue("production"),
+
               envVar.withName("ALMA_API_HOST") +
               envVar.withValue("https://api-na.hosted.exlibrisgroup.com"),
 
@@ -35,8 +38,12 @@
               envVar.withName("DATABASE_HOST") +
               envVar.withValue(dbName),
 
-              envVar.withName("MYSQL_ROOT_PASSWORD") +
+              envVar.withName("CIRCULATION_HISTORY_DATABASE_PASSWORD") +
               envVar.valueFrom.secretKeyRef.withName(dbName) +
+              envVar.valueFrom.secretKeyRef.withKey("CIRCULATION_HISTORY_DATABASE_PASSWORD"),
+
+              envVar.withName("MYSQL_ROOT_PASSWORD") +
+              envVar.valueFrom.secretKeyRef.withName(dbName + "-root") +
               envVar.valueFrom.secretKeyRef.withKey("MYSQL_ROOT_PASSWORD"),
             ]),
           ],
@@ -65,7 +72,7 @@
             container.withPorts(containerPort.new("mysql", 3306)) +
             container.withEnvMixin([
               envVar.withName("MYSQL_ROOT_PASSWORD") +
-              envVar.valueFrom.secretKeyRef.withName(dbName) +
+              envVar.valueFrom.secretKeyRef.withName(dbName + "-root") +
               envVar.valueFrom.secretKeyRef.withKey("MYSQL_ROOT_PASSWORD"),
             ]) +
             container.withVolumeMounts([
