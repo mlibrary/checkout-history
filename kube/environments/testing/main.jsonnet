@@ -28,6 +28,10 @@
               envVar.withName("RAILS_ENV") +
               envVar.withValue("production"),
 
+              envVar.withName("SECRET_KEY_BASE") +
+              envVar.valueFrom.secretKeyRef.withName("rails-secret-key-base") +
+              envVar.valueFrom.secretKeyRef.withKey("SECRET_KEY_BASE"),
+
               envVar.withName("ALMA_API_HOST") +
               envVar.withValue("https://api-na.hosted.exlibrisgroup.com"),
 
