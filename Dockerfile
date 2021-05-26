@@ -14,6 +14,8 @@ RUN apt-get update -yqq && apt-get install -yqq --no-install-recommends \
   nodejs \
   vim
 
+RUN apt install -y netcat
+
 RUN gem install bundler:2.1.4
 
 
