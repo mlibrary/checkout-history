@@ -10,6 +10,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - uses: craftech-io/package-action@v3.1.0
+      name: build circ-history
       with:
         access_token: ${{ secrets.GITHUB_TOKEN }}
         image_name: unstable
@@ -17,9 +18,10 @@ jobs:
           latest
           ${{ github.sha }}
     - uses: craftech-io/package-action@v3.1.0
+      name: build dev_db
       with:
         access_token: ${{ secrets.GITHUB_TOKEN }}
-        context: db/development_db/.
+        dockerfile: Dockerfile.dev-db
         image_name: dev-db
         tags: |
           latest
