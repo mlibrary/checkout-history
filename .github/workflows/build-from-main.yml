@@ -16,3 +16,11 @@ jobs:
         tags: |
           latest
           ${{ github.sha }}
+    - uses: craftech-io/package-action@v3.1.0
+      with:
+        access_token: ${{ secrets.GITHUB_TOKEN }}
+        context: db/development_db/.
+        image_name: dev-db
+        tags: |
+          latest
+          ${{ github.sha }}
