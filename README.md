@@ -9,7 +9,7 @@ This is the repository for the circulation history app that is attached to My Ac
 
 2. Set up the environment variables by copying .env-example
 ```bash
-$ vi cp .env-example .env
+$ cp .env-example .env
 $ vi .env
 ```
 
@@ -41,4 +41,4 @@ $ docker-compose run --rm web bundle exec rspec
 ```
 
 ### Test database
-Docker.dev-db has instructions for creating an image of the database that's preloaded with fake data. It's intended for use with (patron-account)[https://github.com/mlibrary/patron_account]. 
+Docker.dev-db has instructions for creating an image of the database that's preloaded with fake data. It's intended for use with [patron_account/My Account](https://github.com/mlibrary/patron_account). 
