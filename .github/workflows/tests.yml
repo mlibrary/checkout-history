@@ -1,8 +1,6 @@
 name: Run Tests
 
-on: 
-  push:
-    branches: [ main ]
+on: push
 
 jobs:
   # Run tests
@@ -49,6 +47,8 @@ jobs:
         run: docker-compose -f docker-compose.test.yml up -d database
       - name: docker state
         run: docker-compose -f docker-compose.test.yml ps
+      - name: wait for db
+        run: docker-compose -f docker-compose.test.yml run web bin/wait-for database:3306 
       - name: create databases
         run: docker-compose -f docker-compose.test.yml run web bundle exec rails db:create
 
