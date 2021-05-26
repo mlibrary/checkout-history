@@ -64,7 +64,7 @@ CREATE TABLE `auth_tokens` (
 
 LOCK TABLES `auth_tokens` WRITE;
 /*!40000 ALTER TABLE `auth_tokens` DISABLE KEYS */;
-INSERT INTO `auth_tokens` VALUES (1,'circhistoryauthtoken','patron-account','2021-05-21 19:36:29.029590','2021-05-21 19:36:29.029590');
+INSERT INTO `auth_tokens` VALUES (1,'circulation_history_api_key','patron-account','2021-05-21 19:36:29.029590','2021-05-21 19:36:29.029590');
 /*!40000 ALTER TABLE `auth_tokens` ENABLE KEYS */;
 UNLOCK TABLES;
 
