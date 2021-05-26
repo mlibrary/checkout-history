@@ -11,10 +11,11 @@ services:
     environment:
       - CIRC_REPORT_PATH=/circ/report/path
       - PATRON_REPORT_PATH=/patron/report/path
-      - ALMA_API_KEY='YOUR_ALMA_API_KEY'
-      - ALMA_API_HOST='http://falma:4567'
+      - ALMA_API_KEY=YOUR_ALMA_API_KEY
+      - ALMA_API_HOST=http://falma:4567
       - MYSQL_ROOT_PASSWORD=mysqlrootpassword
       - DATABASE_HOST=database
+
 
   database:
     image: mariadb
