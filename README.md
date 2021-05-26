@@ -39,3 +39,6 @@ For Rails rspec tests make sure then database is running. Then run the tests:
 $ docker-compose up -d database
 $ docker-compose run --rm web bundle exec rspec
 ```
+
+### Test database
+Docker.dev-db has instructions for creating an image of the database that's preloaded with fake data. It's intended for use with (patron-account)[https://github.com/mlibrary/patron_account]. 
