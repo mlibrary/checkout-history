@@ -5,7 +5,7 @@
       web: {
         name: 'circulation-history-web',
         port: 3000,
-        host: 'testing.circulation-history.kubernetes.lib.umich.edu',
+        host: 'staging.circulation-history.kubernetes.lib.umich.edu',
       },
       db: {
         name: 'circulation-history-db',
@@ -21,4 +21,3 @@
 } +
 (import 'ksonnet-util/kausal.libsonnet') +
 (import 'circulation_history/circulation_history.libsonnet')
-
