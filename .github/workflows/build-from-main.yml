@@ -1,10 +1,10 @@
 name: Build latest from main
 
-on:
-  workflow_run:
-    workflows: [ 'Run Tests' ]
-    branches: [ 'main' ]
-    types: [ completed ]
+on: push
+  #workflow_run:
+    #workflows: [ 'Run Tests' ]
+    #branches: [ 'main' ]
+    #types: [ completed ]
 
 env:
   IMAGE_NAME: circulation_history_unstable
@@ -15,6 +15,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+    - name: Log into registry
+      run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
     - name: Build circulation history image
       run: docker build . --tag $IMAGE_NAME --label "runnumber=${GITHUB_RUN_ID}"
     - name: Push circulation history image
