@@ -41,4 +41,4 @@ $ docker-compose run --rm web bundle exec rspec
 ```
 
 ### Test database
-Docker.dev-db has instructions for creating an image of the database that's preloaded with fake data. It's intended for use with [patron_account/My Account](https://github.com/mlibrary/patron_account). 
+`lib/dev_db/Dockerfile` has instructions for creating an image of the database that's preloaded with fake data. It's intended for use with [patron_account/My Account](https://github.com/mlibrary/patron_account). 

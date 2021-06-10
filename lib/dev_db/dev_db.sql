@@ -150,7 +150,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES ('ajones',1,1,'2021-05-20 15:47:48.197128','2021-05-20 15:47:48.197128'),('mlibrary.acct.testing1@gmail.com',1,1,'2021-05-20 15:47:48.199693','2021-05-20 15:47:48.199693'),('mlibrary.acct.testing2@gmail.com',1,1,'2021-05-20 15:47:48.450703','2021-05-20 15:47:48.450703'),('mlibrary.acct.testing3@gmail.com',1,1,'2021-05-20 15:47:48.586127','2021-05-20 15:47:48.586127');
+INSERT INTO `users` VALUES ('ajones',1,1,'2021-05-20 15:47:48.197128','2021-05-20 15:47:48.197128'),('mlibrary.acct.testing1@gmail.com',1,0,'2021-05-20 15:47:48.199693','2021-05-20 15:47:48.199693'),('mlibrary.acct.testing2@gmail.com',1,0,'2021-05-20 15:47:48.450703','2021-05-20 15:47:48.450703'),('mlibrary.acct.testing3@gmail.com',1,0,'2021-05-20 15:47:48.586127','2021-05-20 15:47:48.586127');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

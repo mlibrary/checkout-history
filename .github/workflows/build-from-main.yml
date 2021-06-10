@@ -1,10 +1,10 @@
 name: Build latest from main
 
-on: push
-  #workflow_run:
-    #workflows: [ 'Run Tests' ]
-    #branches: [ 'main' ]
-    #types: [ completed ]
+on:
+  workflow_run:
+    workflows: [ 'Run Tests' ]
+    branches: [ 'main' ]
+    types: [ completed ]
 
 env:
   IMAGE_NAME: circulation_history_unstable
