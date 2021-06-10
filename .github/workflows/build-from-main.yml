@@ -1,28 +1,37 @@
 name: Build latest from main
 
 on:
-  push:
-    branches: [ main ]
+  workflow_run:
+    workflows: [ 'Run Tests' ]
+    branches: [ 'main' ]
+    types: [ completed ]
+
+env:
+  IMAGE_NAME: circulation_history_unstable
+  DEV_DB_IMAGE_NAME: dev_db
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - uses: craftech-io/package-action@v3.1.0
-      name: build circ-history
-      with:
-        access_token: ${{ secrets.GITHUB_TOKEN }}
-        image_name: unstable
-        tags: |
-          latest
-          ${{ github.sha }}
-    - uses: craftech-io/package-action@v3.1.0
-      name: build dev_db
-      with:
-        access_token: ${{ secrets.GITHUB_TOKEN }}
-        dockerfile: Dockerfile.dev-db
-        image_name: dev-db
-        tags: |
-          latest
-          ${{ github.sha }}
+    - name: Build circulation history image
+      run: docker build . --tag $IMAGE_NAME --label "runnumber=${GITHUB_RUN_ID}"
+    - name: Push circulation history image
+      run: |
+        IMAGE_ID=ghcr.io/mlibrary/$IMAGE_NAME
+        # Change all uppercase to lowercase
+          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+          docker tag $IMAGE_NAME $IMAGE_ID:latest
+          docker tag $IMAGE_NAME $IMAGE_ID:$GITHUB_SHA
+          docker push $IMAGE_ID --all-tags
+    - name: Build dev_db image
+      run: docker build lib/dev_db/. --tag $DEV_DB_IMAGE_NAME --label "runnumber=${GITHUB_RUN_ID}"
+    - name: Push dev_db image
+      run: |
+        IMAGE_ID=ghcr.io/mlibrary/$DEV_DB_IMAGE_NAME
+        # Change all uppercase to lowercase
+        IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+        docker tag $DEV_DB_IMAGE_NAME $IMAGE_ID:latest
+        docker tag $DEV_DB_IMAGE_NAME $IMAGE_ID:$GITHUB_SHA
+        docker push $IMAGE_ID --all-tags
