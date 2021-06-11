@@ -5,7 +5,6 @@
       web: {
         name: 'circulation-history-web',
         port: 3000,
-        host: 'testing.circulation-history.kubernetes.lib.umich.edu',
       },
       db: {
         name: 'circulation-history-db',
@@ -15,7 +14,7 @@
 
   _images+:: {
     circulation_history: {
-      web: 'docker.pkg.github.com/mlibrary/circulation_history/unstable:latest',
+      web: 'ghcr.io/mlibrary/circulation_history_unstable:latest',
     },
   },
 } +

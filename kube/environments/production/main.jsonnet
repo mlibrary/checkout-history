@@ -14,7 +14,7 @@
 
   _images+:: {
     circulation_history: {
-      web: 'ghcr.io/mlibrary/circulation_history_unstable:latest',
+      web: 'ghcr.io/mlibrary/circulation_history:latest',
     },
   },
 } +

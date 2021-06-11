@@ -54,8 +54,8 @@
       ) + 
       deployment.spec.strategy.withType('Recreate') +
       deployment.spec.selector.withMatchLabels({app: config.web.name}) +
-      deployment.spec.template.metadata.withLabels({app: config.web.name}) +
-      deployment.spec.template.spec.withImagePullSecrets([{name: "github-packages-read"}]),
+      deployment.spec.template.metadata.withLabels({app: config.web.name}),
+      
 
       service: $.util.serviceFor(self.deployment), 
     },
