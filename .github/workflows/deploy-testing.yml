@@ -10,6 +10,9 @@ on:
     workflows: [ 'Build latest from main' ]
     types: [ completed ]
 
+env:
+  IMAGE_ID: ghcr.io/mlibrary/circulation_history_unstable
+
 jobs:
   deploy:
     if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
@@ -45,8 +48,8 @@ jobs:
     - name: Automatic Deploy
       if: ${{ github.event_name == 'workflow_run' }}
       run: |
-        kubectl set image deployment circulation-history-web circulation-history=docker.pkg.github.com/mlibrary/circulation_history/unstable:${{ github.sha }}
+        kubectl set image deployment circulation-history-web circulation-history=$IMAGE_ID:${{ github.sha }}
     - name: Manual Deploy
       if: ${{ github.event_name == 'workflow_dispatch' }}
       run: |
-        kubectl set image deployment circulation-history-web circulation-history=docker.pkg.github.com/mlibrary/circulation_history/unstable:${{ steps.tag_check.outputs.tag }}
+        kubectl set image deployment circulation-history-web circulation-history=$IMAGE_ID:${{ steps.tag_check.outputs.tag }}
