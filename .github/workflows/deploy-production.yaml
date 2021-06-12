@@ -42,4 +42,4 @@ jobs:
         kubectl config set-context default --cluster=cluster --user=default --namespace=patron-account
         kubectl config use-context default
     - name: Manual Deploy
-      run: kubectl set image deployment web web=$IMAGE_ID:${{ steps.tag_check.outputs.tag }}
+      run: kubectl set image deployment circulation-history-web circulation-history=$IMAGE_ID:${{ steps.tag_check.outputs.tag }}
