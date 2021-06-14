@@ -17,14 +17,14 @@ describe "get /v1/users/:uniqname/loans", :type => :request do
       expect(response).to have_http_status(:success)
       expect(response.body).to include(loan.title)
     end
-    it "creates a patron if one doesn't exist" do
+    it "returns appropriate response if user doesn't exist" do
       get "/v1/users/soandso/loans"
-      expect(response).to have_http_status(:success)
-      expect(response.body).to eq({loans: [], total_record_count: 0}.to_json)
-      user = User.first
-      expect(user.uniqname).to eq('soandso')
-      expect(user.confirmed).to eq(false)
-      expect(user.retain_history).to eq(false) #have to opt-in to retaining history
+      expect(response).to have_http_status(:bad_request)
+      expect(response.body).to eq({"error": "User not found"}.to_json)
+    end
+    it "does not create a patron if one doesn't exist" do
+      get "/v1/users/soandso/loans"
+      expect(User.count).to eq(0)
     end
     context "pagination params" do
       before(:each) do
@@ -104,7 +104,7 @@ describe "get /v1/users/:uniqname" do
     end
     it "creates a new user if one doesn't exist" do
       get "/v1/users/soandso"
-      expect(User.first.uniqname).to eq('soandso')
+      expect(User.count).to eq(0)
     end
   end
 end
@@ -118,6 +118,14 @@ describe "put /v1/users/:uniqname {retain_history: false}" do
       loan = create(:loan, user: user)
       put "/v1/users/#{user.uniqname}", params: {:retain_history => false }
       expect(response).to redirect_to("/v1/users/#{user.uniqname}")
+      updated_user = User.first 
+      expect(updated_user.retain_history).to be_falsey
+      expect(updated_user.confirmed).to be_truthy
+      expect(Loan.all.count).to eq(0)
+    end
+    it "creates a user if one doesn't exist" do
+      put "/v1/users/so_and_so", params: {:retain_history => false }
+      expect(response).to redirect_to("/v1/users/so_and_so")
       updated_user = User.first 
       expect(updated_user.retain_history).to be_falsey
       expect(updated_user.confirmed).to be_truthy

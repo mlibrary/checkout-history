@@ -1,10 +1,15 @@
 module V1
   class LoansController < ApplicationController
     def index
-      user = User.find_or_create_by_uniqname(params[:user_uniqname])
-      @loans = LoansPresenter.new(user: user, 
+      begin
+        user = User.find(params[:user_uniqname])
+      rescue
+        render template: "v1/errors/no_user", status: :bad_request
+      else
+        @loans = LoansPresenter.new(user: user, 
                                   limit: params[:limit], offset: params[:offset],
                                   order_by: params[:order_by], direction: params[:direction])
+      end
       #render json: @loans
     end
     def download

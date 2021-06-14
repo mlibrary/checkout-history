@@ -3,9 +3,12 @@ require 'faker'
 namespace :dev do
   desc "seeds db with development data"
   task :seed => :environment do
-    User.create(uniqname: 'ajones',retain_history: true, confirmed: true)
+
     ['mlibrary.acct.testing1@gmail.com','mlibrary.acct.testing2@gmail.com', 'mlibrary.acct.testing3@gmail.com'].each do |uniqname|
-      User.create(uniqname: uniqname,retain_history: true, confirmed: true)
+      User.find_or_create_by(uniqname: uniqname) do |u| 
+        u.retain_history = true
+        u.confirmed = false
+      end
       (1..35).each do
         Loan.create do |l|
           return_date =  Faker::Date.between(from: 2.years.ago, to: Date.today)
