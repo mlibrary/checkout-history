@@ -8,7 +8,7 @@ on:
 
 env:
   IMAGE_NAME: circulation_history_unstable
-  DEV_DB_IMAGE_NAME: dev_db
+  DEV_DB_IMAGE_NAME: circulation_history_dev_db
 
 jobs:
   build:
