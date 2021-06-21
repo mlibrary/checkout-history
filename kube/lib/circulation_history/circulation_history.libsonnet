@@ -28,6 +28,12 @@
               envVar.withName("RAILS_ENV") +
               envVar.withValue("production"),
 
+              envVar.withName("CIRC_REPORT_PATH") +
+              envVar.withValue("/shared/University of Michigan 01UMICH_INST/Reports/apps/circ-history/circ-history"),
+
+              envVar.withName("PATRON_REPORT_PATH") +
+              envVar.withValue("/shared/University of Michigan 01UMICH_INST/Reports/apps/circ-history/non_expired_users"),
+
               envVar.withName("SECRET_KEY_BASE") +
               envVar.valueFrom.secretKeyRef.withName("rails-secret-key-base") +
               envVar.valueFrom.secretKeyRef.withKey("SECRET_KEY_BASE"),
