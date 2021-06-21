@@ -8,6 +8,7 @@ namespace :alma_circ_history do
       response = client.get_report(path: ENV.fetch('CIRC_REPORT_PATH'))
       if response.code != 200
         Rails.logger.error('Alma Report Failed to Load')
+        Rails.logger.error(response.body)
         next
       end
       response.parsed_response.each do |row|
@@ -41,16 +42,17 @@ namespace :alma_circ_history do
       response = client.get_report(path: ENV.fetch('PATRON_REPORT_PATH'))
       if response.code != 200
         Rails.logger.error('Alma Report Failed to Load')
+        Rails.logger.error(response.body)
         next
       end
       non_expired_users = response.parsed_response.map { |row| row["Primary Identifier"].downcase }
       User.all.each do |user|
         uniqname = user.uniqname
         if non_expired_users.include?(uniqname)
-          Rails.logger.info('Retained User: #{uniqname}')
+          Rails.logger.info("Retained User: #{uniqname}")
         else
           user.destroy
-          Rails.logger.info('Deleted User: #{uniqname}')
+          Rails.logger.info("Deleted User: #{uniqname}")
         end
       end
       Rails.logger.info('Finished')
