@@ -68,7 +68,7 @@ describe "get /v1/users/:uniqname/loans/download" do
       expect(response.body).to include("mms_id")
       expect(response.body).to include(loan.mms_id)
       expect(response.headers["Content-Type"]).to eq("text/csv")
-      expect(response.headers["Content-Disposition"]).to include("filename=\"#{loan.user_uniqname}_circ_history_#{Date.today}.csv\"")
+      expect(response.headers["Content-Disposition"]).to include("filename=\"circulation_history_#{Date.today}.csv\"")
     end
     it "creates a new user if one doesn't exist" do
       get "/v1/users/soandso/loans/download.csv"
