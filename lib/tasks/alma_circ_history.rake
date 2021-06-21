@@ -8,7 +8,6 @@ namespace :alma_circ_history do
       response = client.get_report(path: ENV.fetch('CIRC_REPORT_PATH'))
       if response.code != 200
         Rails.logger.error('Alma Report Failed to Load')
-        Rails.logger.error(response.body)
         next
       end
       response.parsed_response.each do |row|
@@ -42,7 +41,6 @@ namespace :alma_circ_history do
       response = client.get_report(path: ENV.fetch('PATRON_REPORT_PATH'))
       if response.code != 200
         Rails.logger.error('Alma Report Failed to Load')
-        Rails.logger.error(response.body)
         next
       end
       non_expired_users = response.parsed_response.map { |row| row["Primary Identifier"].downcase }
