@@ -32,6 +32,11 @@ namespace :alma_circ_history do
         end
       end
       Rails.logger.info('Finished')
+      begin
+        HTTParty.get(ENV.fetch('PUSHMON_URL'))
+      rescue
+        Rail.logger.error("Failed to contact Pushmon")
+      end
     end
   end
   task :purge => :environment do

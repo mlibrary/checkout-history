@@ -36,6 +36,7 @@ ENV CIRC_REPORT_PATH /circ/report/path
 ENV PATRON_REPORT_PATH /patron/report/path
 ENV MYSQL_ROOT_PASSWORD mysqlrootpassword
 ENV DATABASE_HOST database
+ENV PUSHMON_URL YOUR_PUSHMON_URL
 
 WORKDIR /app
 RUN bundle install
