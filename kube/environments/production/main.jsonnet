@@ -32,6 +32,6 @@
       $.circulation_history_container + 
         {command: ['bundle', 'exec', 'rake', 'alma_circ_history:load']}])
        + cronJob.spec.withConcurrencyPolicy('Forbid')
-       + cronJob.spec.withSchedule("30 2 * * *")
+       + cronJob.spec.withSchedule("0 5 * * *")
        + cronJobTemplateSpec.withRestartPolicy('OnFailure'),
 }
