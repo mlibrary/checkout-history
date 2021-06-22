@@ -35,7 +35,7 @@ namespace :alma_circ_history do
       begin
         HTTParty.get(ENV.fetch('PUSHMON_URL'))
       rescue
-        Rail.logger.error("Failed to contact Pushmon")
+        Rails.logger.error("Failed to contact Pushmon")
       end
     end
   end
