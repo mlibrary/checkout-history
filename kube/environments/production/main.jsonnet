@@ -17,6 +17,9 @@
       web: 'ghcr.io/mlibrary/circulation_history:latest',
     },
   },
+  configMapData+::{ 
+    PUSHMON_URL: 'http://pshmn.com/pernYhN',
+  }
 } +
 (import 'ksonnet-util/kausal.libsonnet') +
 (import 'circulation_history/circulation_history.libsonnet')
