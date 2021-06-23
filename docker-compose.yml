@@ -4,27 +4,24 @@ services:
   web:
     build: .
     ports:
-      - "8000:3000"
+      - "3000:3000"
     volumes:
       - .:/app
       - gem_cache:/gems
     environment:
+      - MARIADB_ROOT_PASSWORD=pass
+      - CIRCULATION_HISTORY_DATABASE_PASSWORD=circulation_history_db_password
+      - DATABASE_HOST=database
       - CIRC_REPORT_PATH=/circ/report/path
       - PATRON_REPORT_PATH=/patron/report/path
-      - MYSQL_ROOT_PASSWORD=mysqlrootpassword
-      - DATABASE_HOST=database
       - ALMA_API_HOST=http://falma:4567
+      - RAILS_LOG_TO_STDOUT=1
+        #- RAILS_ENV=production
     env_file:
       - .env
 
   database:
-    image: mariadb
-    ports:
-      - "3306:3306"
-    environment:
-      - MYSQL_ROOT_PASSWORD=mysqlrootpassword
-    volumes:
-      - db_data:/var/lib/mysql
+    build: lib/dev_db/.
 
   falma:
     build: ./fake_alma/.

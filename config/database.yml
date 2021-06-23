@@ -14,7 +14,7 @@ default: &default
   encoding: utf8mb4
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   username: root
-  password: <%= ENV.fetch("MYSQL_ROOT_PASSWORD") %>
+  password: <%= ENV.fetch("MARIADB_ROOT_PASSWORD") %>
   host: <%= ENV.fetch("DATABASE_HOST") %>
   port: <%= ENV.fetch("DATABASE_PORT", 3306) %>
 
