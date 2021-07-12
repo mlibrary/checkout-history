@@ -47,4 +47,4 @@ $ docker-compose run --rm web bundle exec rspec
 When the rake task alma_circ_history:load runs a get request is made to a [pushmon](https://www.pushmon.com/) url. At the moment the pushmon account is owned by [niquerio](https://github.com/niquerio) 
 
 ## Kubernetes Configuration
-Kubernetes Configuration lives in [patron-account-config](https://github.com/mlibrary/patron-account-kube)
+Kubernetes Configuration lives in [patron-account-kube](https://github.com/mlibrary/patron-account-kube)
