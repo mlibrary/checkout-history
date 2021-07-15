@@ -11,7 +11,7 @@ namespace :aleph_circ_history do
           l.id = SecureRandom.alphanumeric(16)
           l.title = row["Title"]
           l.author = row["Author"]
-          l.mms_id = "99#{row["Aleph_sysnum"]}0206381"
+          l.mms_id = "99#{row["Aleph_sysnum"]}0106381"
           l.return_date = row["Return_date_time"]
           l.checkout_date = row["#Check_out_date_time"]
           l.barcode = row["Item_barcode"]
