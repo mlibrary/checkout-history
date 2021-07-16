@@ -44,4 +44,4 @@ jobs:
     - name: Manual Deploy
       run: |
         kubectl set image deployment circulation-history-web circulation-history=$IMAGE_ID:${{ steps.tag_check.outputs.tag }}
-        kubectl patch cronjob circulation-history-loader --type=json -p='[{"op":"replace", "path": "/spec/jobTemplate/spec/template/spec/containers/0/image", "value":"$IMAGE_ID:${{ steps.tag_check.outputs.tag }"}]'
+        kubectl patch cronjob circulation-history-loader --type=json -p='[{"op":"replace", "path": "/spec/jobTemplate/spec/template/spec/containers/0/image", "value":"$IMAGE_ID:${{ steps.tag_check.outputs.tag }}"}]'
