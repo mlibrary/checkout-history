@@ -2,6 +2,8 @@ require 'rails_helper'
 
 describe "alma_circ_history:load_history" do
   before(:each) do
+    stub_request(:post, ENV["SLACK_URL"])
+    stub_request(:get, ENV["PUSHMON_URL"])
     @stub = stub_alma_get_request(url: 'analytics/reports', 
       query: {path: ENV.fetch('CIRC_REPORT_PATH'), col_names: true, limit: 1000}, 
       body: File.read('./spec/fixtures/circ_history.json') )
