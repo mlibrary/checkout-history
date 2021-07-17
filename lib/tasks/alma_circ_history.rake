@@ -16,7 +16,10 @@ namespace :alma_circ_history do
       summary[:active_loans] = response.parsed_response.count
       response.parsed_response.each do |row|
         u = User.find_or_create_by_uniqname(row["Primary Identifier"])
-        next unless u.retain_history
+        unless u.retain_history
+          Rails.logger.warn("item_loan '#{row["Item Loan Id"]}' not saved: patron opt out")
+          next 
+        end
         loan = Loan.new do |l|
           l.user = u
           l.id = row["Item Loan Id"]
@@ -37,6 +40,7 @@ namespace :alma_circ_history do
         end
       end
       Rails.logger.info('Finished')
+      Rails.logger.info("Summary: #{summary}")
       HTTParty.post(ENV.fetch('SLACK_URL'), body: {text: "Load Finished\n#{summary}"}.to_json)
       begin
         HTTParty.get(ENV.fetch('PUSHMON_URL'))
