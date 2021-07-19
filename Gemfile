@@ -31,7 +31,7 @@ gem 'rails_semantic_logger'
 gem 'prometheus-client'
 gem 'alma_rest_client',
   git: 'https://github.com/mlibrary/alma_rest_client', 
-  branch: 'post-with-body'
+  tag: '1.0.0'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
