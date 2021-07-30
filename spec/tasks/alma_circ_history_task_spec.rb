@@ -60,6 +60,28 @@ describe "alma_circ_history:load_history" do
     expect(User.all.count).to eq(2)
     expect(Loan.all.count).to eq(1)
   end
+  it "handles giant title" do
+    user_ajones
+    user_emcard
+    loans = File.read('./spec/fixtures/circ_history.json')
+    super_long_title = 'a'*1000
+    loans.gsub!('Between the world and me',super_long_title)    
+    @stub.to_return(body: loans, headers: {content_type: 'application/json'})   
+    @stub.response #clear out original response 
+    load_circ_history
+    expect(Loan.all.count).to eq(2)
+  end
+  it "handles giant author" do
+    user_ajones
+    user_emcard
+    loans = File.read('./spec/fixtures/circ_history.json')
+    super_long_author = 'a'*1000
+    loans.gsub!('Caldwell, John, 1938-',super_long_author)    
+    @stub.to_return(body: loans, headers: {content_type: 'application/json'})   
+    @stub.response #clear out original response 
+    load_circ_history
+    expect(Loan.all.count).to eq(2)
+  end
   
 end
 describe "alma_circ_history:purge" do
