@@ -23,8 +23,8 @@ namespace :alma_circ_history do
         loan = Loan.new do |l|
           l.user = u
           l.id = row["Item Loan Id"]
-          l.title = row["Title"][0,255]
-          l.author = row["Author"][0,255]
+          l.title = row["Title"]&.slice(0,255)
+          l.author = row["Author"]&.slice(0,255)
           l.mms_id = row["MMS Id"]
           l.return_date = row["Return Date"]
           l.checkout_date = row["Loan Date"]

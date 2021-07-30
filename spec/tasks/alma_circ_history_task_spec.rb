@@ -82,6 +82,26 @@ describe "alma_circ_history:load_history" do
     load_circ_history
     expect(Loan.all.count).to eq(2)
   end
+  it "handles nil author" do
+    user_ajones
+    user_emcard
+    loans = File.read('./spec/fixtures/circ_history.json')
+    loans.gsub!('<Column1>Caldwell, John, 1938-</Column1>\n','')    
+    @stub.to_return(body: loans, headers: {content_type: 'application/json'})   
+    @stub.response #clear out original response 
+    load_circ_history
+    expect(Loan.all.count).to eq(2)
+  end
+  it "handles nil title" do
+    user_ajones
+    user_emcard
+    loans = File.read('./spec/fixtures/circ_history.json')
+    loans.gsub!('<Column3>Between the world and me /</Column3>\n','')    
+    @stub.to_return(body: loans, headers: {content_type: 'application/json'})   
+    @stub.response #clear out original response 
+    load_circ_history
+    expect(Loan.all.count).to eq(2)
+  end
   
 end
 describe "alma_circ_history:purge" do
