@@ -49,5 +49,5 @@ When the rake task alma_circ_history:load runs a get request is made to a [pushm
 ## Kubernetes Configuration
 Kubernetes Configuration lives in [patron-account-kube](https://github.com/mlibrary/patron-account-kube)
 
-##Alma Analytics Report Backups
+## Alma Analytics Report Backups
 Backup xml files of the analytics reports are located in `./config/alma_analytics_reports/`
