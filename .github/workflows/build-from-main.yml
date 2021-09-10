@@ -46,6 +46,7 @@ jobs:
         cluster_server: https://hatcher.kubernetes.lib.umich.edu
         namespace_token: ${{ secrets.HATCHER_TOKEN }}
         namespace: ${{ secrets.NAMESPACE }}
+        deployment: circulation-history-web
 
   deploy-staging:
     needs: build
@@ -62,3 +63,4 @@ jobs:
         cluster_server: https://hatcher.kubernetes.lib.umich.edu
         namespace_token: ${{ secrets.HATCHER_TOKEN }}
         namespace: ${{ secrets.NAMESPACE }}
+        deployment: circulation-history-web
