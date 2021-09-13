@@ -70,3 +70,4 @@ jobs:
         namespace_token: ${{ secrets.HATCHER_TOKEN }}
         namespace: ${{ secrets.NAMESPACE }}
         deployment: circulation-history-web
+        container: circulation-history
