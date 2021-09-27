@@ -18,7 +18,7 @@ class LoansPresenter
   end
   private
   def protect_order_by(order_by)
-    ['checkout_date','title','author','call_number'].include?(order_by) ? order_by : nil
+    ['checkout_date','return_date','title','author','call_number'].include?(order_by) ? order_by : nil
   end
   def protect_direction(direction)
     ['ASC', 'DESC'].include?(direction) ? direction : nil
