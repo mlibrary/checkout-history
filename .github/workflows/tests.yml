@@ -27,10 +27,10 @@ jobs:
 
       - name: Load .env file
         uses: xom9ikk/dotenv@v1.0.2
-      - name: Set up Ruby 2.7.5
+      - name: Set up Ruby 3.1.1
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 2.7.5
+          ruby-version: 3.1.1
           bundler-cache: true
       - name: Setup up node 16.14.2
         uses: actions/setup-node@v2
