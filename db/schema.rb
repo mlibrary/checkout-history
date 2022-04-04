@@ -10,13 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_06_133110) do
-
+ActiveRecord::Schema[7.0].define(version: 2021_05_06_133110) do
   create_table "auth_tokens", charset: "utf8mb4", force: :cascade do |t|
     t.string "token"
     t.string "name"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "loans", id: :string, charset: "utf8mb4", force: :cascade do |t|
@@ -24,10 +23,10 @@ ActiveRecord::Schema.define(version: 2021_05_06_133110) do
     t.string "title"
     t.string "author"
     t.string "mms_id"
-    t.datetime "return_date"
-    t.datetime "checkout_date"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "return_date", precision: nil
+    t.datetime "checkout_date", precision: nil
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string "barcode"
     t.string "call_number"
     t.string "description"
@@ -37,8 +36,8 @@ ActiveRecord::Schema.define(version: 2021_05_06_133110) do
   create_table "users", primary_key: "uniqname", id: :string, charset: "utf8mb4", force: :cascade do |t|
     t.boolean "retain_history", default: false
     t.boolean "confirmed", default: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   add_foreign_key "loans", "users", column: "user_uniqname", primary_key: "uniqname"
