@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 6.1.1'
+gem 'rails', '~> 7.0.0'
 # Use mysql as the database for Active Record
 gem 'mysql2', '~> 0.5'
 # Use Puma as the app server
@@ -29,12 +29,12 @@ gem 'rails_semantic_logger'
 gem 'prometheus-client'
 gem 'alma_rest_client',
   git: 'https://github.com/mlibrary/alma_rest_client', 
-  tag: '1.2.1'
+  tag: '1.3.1'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
-  gem 'rspec-rails', '~> 4.0.2' 
+  gem 'rspec-rails'
   gem 'simplecov'
 end
 
