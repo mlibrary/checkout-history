@@ -1,5 +1,5 @@
 require "rails_helper"
-describe "get /v1/users/:uniqname/loans", :type => :request do
+describe "get /v1/users/:uniqname/loans", type: :request do
   context "unauthorized request" do
     it "shows a patron's loan history" do
       loan = create(:loan)
@@ -20,7 +20,7 @@ describe "get /v1/users/:uniqname/loans", :type => :request do
     it "returns appropriate response if user doesn't exist" do
       get "/v1/users/soandso/loans"
       expect(response).to have_http_status(:bad_request)
-      expect(response.body).to eq({"error": "User not found"}.to_json)
+      expect(response.body).to eq({error: "User not found"}.to_json)
     end
     it "does not create a patron if one doesn't exist" do
       get "/v1/users/soandso/loans"
@@ -45,17 +45,17 @@ describe "get /v1/users/:uniqname/loans", :type => :request do
         expect(loans.first["title"]).to eq(@loan2.title)
       end
       it "handles sorting" do
-        @loan1.update(title: 'ZZZZ')
-        @loan2.update(title: 'AAAA')
-        loan3 = create(:loan, user: @user, title: 'BBBB')
-        get "/v1/users/#{@user.uniqname}/loans", params: {order_by: 'title'}
+        @loan1.update(title: "ZZZZ")
+        @loan2.update(title: "AAAA")
+        loan3 = create(:loan, user: @user, title: "BBBB")
+        get "/v1/users/#{@user.uniqname}/loans", params: {order_by: "title"}
         loans = JSON.parse(response.body)["loans"]
-        expect(loans[0]["title"]).to eq('AAAA')
-        expect(loans[1]["title"]).to eq('BBBB')
-        expect(loans[2]["title"]).to eq('ZZZZ')
+        expect(loans[0]["title"]).to eq("AAAA")
+        expect(loans[1]["title"]).to eq("BBBB")
+        expect(loans[2]["title"]).to eq("ZZZZ")
       end
     end
-  end 
+  end
 end
 describe "get /v1/users/:uniqname/loans/download" do
   before(:each) do
@@ -72,25 +72,24 @@ describe "get /v1/users/:uniqname/loans/download" do
     end
     it "creates a new user if one doesn't exist" do
       get "/v1/users/soandso/loans/download.csv"
-      expect(User.first.uniqname).to eq('soandso')
+      expect(User.first.uniqname).to eq("soandso")
     end
   end
 end
 describe "get /v1/users/:uniqname" do
   context "unauthorized" do
     it "returns unauthorized" do
-      user = create(:user, uniqname: 'emcard')
+      user = create(:user, uniqname: "emcard")
       get "/v1/users/#{CGI.escape(user.uniqname)}"
       expect(response).to have_http_status(:unauthorized)
     end
   end
   context "authorized" do
-
     before(:each) do
       authorize
     end
     it "handle patron with email address uniqname" do
-      user = create(:user, uniqname: 'so.and.so@example.com')
+      user = create(:user, uniqname: "so.and.so@example.com")
       get "/v1/users/#{CGI.escape(user.uniqname)}"
       expect(response).to have_http_status(:success)
     end
@@ -98,8 +97,8 @@ describe "get /v1/users/:uniqname" do
       user = create(:user)
       get "/v1/users/#{user.uniqname}"
       expect(response).to have_http_status(:success)
-      expect(response.body).to include('retain_history')
-      expect(response.body).to include('confirmed')
+      expect(response.body).to include("retain_history")
+      expect(response.body).to include("confirmed")
       expect(response.body).to include(user.uniqname)
     end
     it "creates a new user if one doesn't exist" do
@@ -116,17 +115,17 @@ describe "put /v1/users/:uniqname {retain_history: false}" do
     it "changes a patron's loan retention status and confirmation status and deletes existing loans; returns updated user" do
       user = create(:user, retain_history: true, confirmed: false)
       loan = create(:loan, user: user)
-      put "/v1/users/#{user.uniqname}", params: {:retain_history => false }
+      put "/v1/users/#{user.uniqname}", params: {retain_history: false}
       expect(response).to redirect_to("/v1/users/#{user.uniqname}")
-      updated_user = User.first 
+      updated_user = User.first
       expect(updated_user.retain_history).to be_falsey
       expect(updated_user.confirmed).to be_truthy
       expect(Loan.all.count).to eq(0)
     end
     it "creates a user if one doesn't exist" do
-      put "/v1/users/so_and_so", params: {:retain_history => false }
+      put "/v1/users/so_and_so", params: {retain_history: false}
       expect(response).to redirect_to("/v1/users/so_and_so")
-      updated_user = User.first 
+      updated_user = User.first
       expect(updated_user.retain_history).to be_falsey
       expect(updated_user.confirmed).to be_truthy
       expect(Loan.all.count).to eq(0)
@@ -136,7 +135,7 @@ describe "put /v1/users/:uniqname {retain_history: false}" do
     it "returns unauthorized" do
       user = create(:user, retain_history: true, confirmed: false)
       loan = create(:loan, user: user)
-      put "/v1/users/#{user.uniqname}", params: {:retain_history => false }
+      put "/v1/users/#{user.uniqname}", params: {retain_history: false}
       expect(response).to have_http_status(:unauthorized)
     end
   end
