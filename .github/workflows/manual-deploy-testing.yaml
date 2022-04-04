@@ -56,6 +56,7 @@ jobs:
       uses: docker/build-push-action@v2
       with:
         context: .
+        file: Dockerfile.prod
         push: true
         tags: ghcr.io/mlibrary/${{ secrets.IMAGE_NAME }}:${{steps.tag_check.outputs.tag}}
     - name: Deploy to ${{ env.environment }}
