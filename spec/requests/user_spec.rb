@@ -47,7 +47,7 @@ describe "get /v1/users/:uniqname/loans", type: :request do
       it "handles sorting" do
         @loan1.update(title: "ZZZZ")
         @loan2.update(title: "AAAA")
-        loan3 = create(:loan, user: @user, title: "BBBB")
+        create(:loan, user: @user, title: "BBBB")
         get "/v1/users/#{@user.uniqname}/loans", params: {order_by: "title"}
         loans = JSON.parse(response.body)["loans"]
         expect(loans[0]["title"]).to eq("AAAA")
@@ -114,7 +114,7 @@ describe "put /v1/users/:uniqname {retain_history: false}" do
     end
     it "changes a patron's loan retention status and confirmation status and deletes existing loans; returns updated user" do
       user = create(:user, retain_history: true, confirmed: false)
-      loan = create(:loan, user: user)
+      create(:loan, user: user)
       put "/v1/users/#{user.uniqname}", params: {retain_history: false}
       expect(response).to redirect_to("/v1/users/#{user.uniqname}")
       updated_user = User.first
@@ -134,7 +134,7 @@ describe "put /v1/users/:uniqname {retain_history: false}" do
   context "unauthorized" do
     it "returns unauthorized" do
       user = create(:user, retain_history: true, confirmed: false)
-      loan = create(:loan, user: user)
+      create(:loan, user: user)
       put "/v1/users/#{user.uniqname}", params: {retain_history: false}
       expect(response).to have_http_status(:unauthorized)
     end

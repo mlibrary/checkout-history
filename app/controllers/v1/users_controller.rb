@@ -4,7 +4,6 @@ module V1
       @user = User.find(params[:uniqname])
     rescue
       render template: "v1/errors/no_user", status: :bad_request
-    else
     end
 
     def update
@@ -12,7 +11,7 @@ module V1
       if @user.update(retain_history: params[:retain_history])
         redirect_to action: "show", uniqname: @user.uniqname
       else
-        # error?
+        render template: "v1/errors/update_failed", status: :bad_request
       end
     end
   end
