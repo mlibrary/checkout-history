@@ -5,12 +5,11 @@ namespace :alma_circ_history do
     summary = {active_loans: 0, loans_loaded: 0}
     Rails.logger.tagged("Circ Load") do
       Rails.logger.info("Started")
-      HTTParty.post(ENV.fetch("SLACK_URL"), body: {text: "Load Started"}.to_json)
+      Yabeda.checkout_history_load_last_success.set({}, Time.now.to_i)
       client = AlmaRestClient.client
       response = client.get_report(path: ENV.fetch("CIRC_REPORT_PATH"))
       if response.code != 200
         Rails.logger.error("Alma Report Failed to Load")
-        HTTParty.post(ENV.fetch("SLACK_URL"), body: {text: "Load FAILED"}.to_json)
         next
       end
       summary[:active_loans] = response.parsed_response.count
@@ -41,11 +40,11 @@ namespace :alma_circ_history do
       end
       Rails.logger.info("Finished")
       Rails.logger.info("Summary: #{summary}")
-      HTTParty.post(ENV.fetch("SLACK_URL"), body: {text: "Load Finished\n#{summary}"}.to_json)
+      Yabeda.checkout_history_num_items_loaded.set({}, summary[:loans_loaded])
       begin
-        HTTParty.get(ENV.fetch("PUSHMON_URL"))
+        Yabeda::Prometheus.push_gateway.add(Yabeda::Prometheus.registry)
       rescue
-        Rails.logger.error("Failed to contact Pushmon")
+        Rails.logger.error("Failed to contact the push gateway")
       end
     end
   end

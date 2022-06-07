@@ -5,6 +5,7 @@ services:
     build: .
     ports:
       - "3000:3000"
+      - "9394:9394"
     volumes:
       - .:/app
       - gem_cache:/gems
@@ -21,6 +22,12 @@ services:
       - "4444:4567"
     volumes:
       - ./fake_alma/.:/app
+
+  pushgateway:
+    image: prom/pushgateway
+    ports:
+      - 9091:9091
+
   
 volumes:
   gem_cache:

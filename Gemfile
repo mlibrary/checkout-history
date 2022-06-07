@@ -9,15 +9,19 @@ gem "mysql2", "~> 0.5"
 gem "puma", "~> 5.0"
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem "jbuilder", "~> 2.7"
-gem "faker" # needed for the dev_seed task.
+
+# needed in production gems for the dev_seed task which is needed for loading up the testing namespace db.
+gem "faker"
 
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", ">= 1.4.4", require: false
 
 gem "amazing_print"
 gem "rails_semantic_logger"
+gem "yabeda-rails"
+gem "yabeda-puma-plugin"
+gem "yabeda-prometheus"
 
-gem "prometheus-client"
 gem "alma_rest_client",
   git: "https://github.com/mlibrary/alma_rest_client",
   tag: "1.3.1"

@@ -41,3 +41,10 @@ pidfile ENV.fetch("PIDFILE") { "tmp/pids/server.pid" }
 
 # Allow puma to be restarted by `rails restart` command.
 plugin :tmp_restart
+
+require "prometheus/client"
+
+activate_control_app
+plugin :yabeda
+plugin :yabeda_prometheus
+prometheus_exporter_url "tcp://0.0.0.0:9394/metrics"
