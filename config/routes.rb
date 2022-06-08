@@ -5,5 +5,4 @@ Rails.application.routes.draw do
       get "/loans/download", to: "loans#download"
     end
   end
-  get "test_gauge", to: "test#gauge"
 end

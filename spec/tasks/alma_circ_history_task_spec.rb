@@ -2,8 +2,7 @@ require "rails_helper"
 
 describe "alma_circ_history:load_history" do
   before(:each) do
-    stub_request(:post, ENV["SLACK_URL"])
-    stub_request(:get, ENV["PUSHMON_URL"])
+    @pushgateway_stub = stub_request(:post, "#{ENV["PROMETHEUS_PUSH_GATEWAY"]}/metrics/job/checkout_history")
     @stub = stub_alma_get_request(url: "analytics/reports",
       query: {path: ENV.fetch("CIRC_REPORT_PATH"), col_names: true, limit: 1000},
       body: File.read("./spec/fixtures/circ_history.json"))
@@ -101,6 +100,20 @@ describe "alma_circ_history:load_history" do
     @stub.response # clear out original response
     load_circ_history
     expect(Loan.all.count).to eq(2)
+  end
+  it "sends a message to the push gateway" do
+    user_ajones
+    user_emcard
+    @pushgateway_stub.with(body: /checkout_history_num_items_loaded/)
+    load_circ_history
+    expect(@pushgateway_stub).to have_been_requested
+  end
+  it "handles not being able to contact the push gateway" do
+    @pushgateway_stub.to_timeout
+    user_ajones
+    user_emcard
+    expect(Rails.logger).to receive(:error).with("Failed to contact the push gateway")
+    load_circ_history
   end
 end
 describe "alma_circ_history:purge" do

@@ -29,5 +29,9 @@ module CirculationHistory
     config.rails_semantic_logger.rendered = true
     config.colorize_logging = false
     config.time_zone = "Eastern Time (US & Canada)"
+    Yabeda.configure do
+      gauge :checkout_history_load_last_success, comment: "Time that the circ history load last succeeded"
+      gauge :checkout_history_num_items_loaded, comment: "Number of items loaded into the checkout history database"
+    end
   end
 end
