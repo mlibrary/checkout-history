@@ -5,4 +5,5 @@ Rails.application.routes.draw do
       get "/loans/download", to: "loans#download"
     end
   end
+  get "/-/live", to: "monitoring#live"
 end
