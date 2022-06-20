@@ -1,5 +1,5 @@
 module V1
-  class UsersController < ApplicationController
+  class UsersController < V1Controller
     def show
       @user = User.find(params[:uniqname])
     rescue
