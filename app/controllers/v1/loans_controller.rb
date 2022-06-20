@@ -1,5 +1,5 @@
 module V1
-  class LoansController < ApplicationController
+  class LoansController < V1Controller
     def index
       user = User.find(params[:user_uniqname])
     rescue
