@@ -32,15 +32,41 @@ describe "alma_circ_history:load_history" do
     load_circ_history
     expect(Loan.all.count).to eq(2)
   end
-  it "skips over already loaded history" do
+  it "skips over already loaded history with a return date" do
     user_ajones
     user_emcard
-    loan = create(:loan, id: "3159980960006381", title: "my_title")
+    loan = create(:loan, id: "3159980960006381", title: "my_title", checkout_date: "2020-01-07", return_date: "2022-07-20" )
     expect(Loan.all.count).to eq(1)
     load_circ_history
     expect(Loan.all.count).to eq(2)
     expect(Loan.find(loan.id).title).to eq("my_title")
   end
+ 
+  it "skips over already loaded history where there isn't a new return date in the report" do
+    user_ajones
+    user_emcard
+    loan = create(:loan, id: "3159980960006381", title: "my_title", checkout_date: "2020-01-07" )
+    loans = File.read("./spec/fixtures/circ_history.json")
+    loans.gsub!("2021-01-14", '')
+    @stub.to_return(body: loans, headers: {content_type: "application/json"})
+    @stub.response # clear out original response
+    expect(Loan.all.count).to eq(1)
+    load_circ_history
+    expect(Loan.all.count).to eq(2)
+    expect(Loan.find(loan.id).title).to eq("my_title")
+
+  end
+  it "processes already loaded history that doesn't include a reutrn date where theres a new return date in the report" do
+    user_ajones
+    user_emcard
+    loan = create(:loan, id: "3159980960006381", title: "my_title", checkout_date: "2022-01-07" )
+    expect(Loan.all.count).to eq(1)
+    load_circ_history
+    expect(Loan.all.count).to eq(2)
+    expect(Loan.find(loan.id).title).to eq("Between the world and me /")
+    expect(Loan.find(loan.id).return_date.to_date.to_fs(:db)).to eq("2021-01-14")
+  end
+  
 
   it "it adds user if they don't exist" do
     user_ajones
