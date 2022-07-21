@@ -19,7 +19,11 @@ namespace :alma_circ_history do
           Rails.logger.warn("item_loan '#{row["Item Loan Id"]}' not saved: patron opt out")
           next
         end
-        loan = Loan.new do |l|
+        loan = Loan.find_or_create_by(id: row["Item Loan Id"])
+        next if loan.return_date.present? || loan.checkout_date&.to_date&.to_fs(:db) == row["Loan Date"]
+
+        # mrio: using `tap` so I can use block syntax
+        loan.tap do |l|
           l.user = u
           l.id = row["Item Loan Id"]
           l.title = row["Title"]&.slice(0, 255)

@@ -33,7 +33,9 @@
                <sawx:expr xsi:type="sawx:sqlExpression">"Loan Details"."Call Number"</sawx:expr></saw:columnFormula></saw:column></saw:columns>
       <saw:filter>
          <sawx:expr xsi:type="sawx:logical" op="and">
-            <sawx:expr xsi:type="sawx:sql">"Loan Date"."Loan Date" &gt;= TIMESTAMPADD(SQL_TSI_DAY, -7, CURRENT_DATE)</sawx:expr>
+            <sawx:expr xsi:type="sawx:logical" op="or">
+               <sawx:expr xsi:type="sawx:sql">"Loan Date"."Loan Date" &gt;= TIMESTAMPADD(SQL_TSI_DAY, -7, CURRENT_DATE)</sawx:expr>
+               <sawx:expr xsi:type="sawx:sql">"Return Date"."Return Date" &gt;= TIMESTAMPADD(SQL_TSI_DAY, -7, CURRENT_DATE)</sawx:expr></sawx:expr>
             <sawx:expr xsi:type="sawx:comparison" op="notEqual">
                <sawx:expr xsi:type="sawx:sqlExpression">"Borrower Details"."Primary Identifier"</sawx:expr>
                <sawx:expr xsi:type="xsd:string">None</sawx:expr></sawx:expr>

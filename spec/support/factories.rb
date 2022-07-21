@@ -16,8 +16,6 @@ FactoryBot.define do
         loan.return_date = Faker::Date.backward(days: 365)
         loan.checkout_date = Faker::Date.between(from: loan.return_date - 180.days,
           to: loan.return_date)
-      elsif loan.return_date.nil?
-        loan.return_date = Faker::Date.between(from: loan.checkout_date, to: DateTime.now)
       end
     end
   end
