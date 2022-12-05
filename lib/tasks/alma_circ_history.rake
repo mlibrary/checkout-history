@@ -14,7 +14,7 @@ namespace :alma_circ_history do
       end
       summary[:active_loans] = response.parsed_response.count
       response.parsed_response.each do |row|
-        u = User.find_or_create_by_uniqname(row["Primary Identifier"])
+        u = User.find_or_create_by_uniqname(row["User Primary Identifier"])
         unless u.retain_history
           Rails.logger.warn("item_loan '#{row["Item Loan Id"]}' not saved: patron opt out")
           next
@@ -61,7 +61,7 @@ namespace :alma_circ_history do
         Rails.logger.error("Alma Report Failed to Load")
         next
       end
-      non_expired_users = response.parsed_response.map { |row| row["Primary Identifier"].downcase }
+      non_expired_users = response.parsed_response.map { |row| row["User Primary Identifier"].downcase }
       User.all.each do |user|
         uniqname = user.uniqname
         if non_expired_users.include?(uniqname)
