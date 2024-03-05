@@ -22,15 +22,14 @@ jobs:
       - uses: actions/checkout@v2
       - name: Create .env file
         run: |
-          sed 's/DATABASE_HOST=database/DATABASE_HOST=127.0.0.1/' .env-dev-values > .env-actions
-          cat .env-example .env-actions > .env
-
+          sed 's/DATABASE_HOST=database/DATABASE_HOST=127.0.0.1/' env.development > env.actions
+          cat env.example env.actions > .env
       - name: Load .env file
-        uses: xom9ikk/dotenv@v1.0.2
-      - name: Set up Ruby 3.1.1
+        uses: xom9ikk/dotenv@v2
+      - name: Set up Ruby 3.1
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 3.1.1
+          ruby-version: 3.1
           bundler-cache: true
       - name: Setup up node 16.14.2
         uses: actions/setup-node@v2

@@ -11,14 +11,14 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema[7.0].define(version: 2021_05_06_133110) do
-  create_table "auth_tokens", charset: "utf8mb4", force: :cascade do |t|
+  create_table "auth_tokens", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.string "token"
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "loans", id: :string, charset: "utf8mb4", force: :cascade do |t|
+  create_table "loans", id: :string, charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.string "user_uniqname", null: false
     t.string "title"
     t.string "author"
@@ -33,7 +33,7 @@ ActiveRecord::Schema[7.0].define(version: 2021_05_06_133110) do
     t.index ["user_uniqname"], name: "index_loans_on_user_uniqname"
   end
 
-  create_table "users", primary_key: "uniqname", id: :string, charset: "utf8mb4", force: :cascade do |t|
+  create_table "users", primary_key: "uniqname", id: :string, charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.boolean "retain_history", default: false
     t.boolean "confirmed", default: false
     t.datetime "created_at", null: false
