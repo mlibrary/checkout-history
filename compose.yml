@@ -1,8 +1,8 @@
-version: '3'
-
 services:
   web:
-    build: .
+    build: 
+      context: .
+      target: development
     ports:
       - "3000:3000"
       - "9394:9394"
@@ -11,7 +11,7 @@ services:
       - gem_cache:/gems
     env_file:
       - .env
-      - .env-dev-values
+      - env.development
 
   database:
     build: lib/dev_db/.
@@ -28,7 +28,6 @@ services:
     ports:
       - 9091:9091
 
-  
 volumes:
   gem_cache:
   db_data:
