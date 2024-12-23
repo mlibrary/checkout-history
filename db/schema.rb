@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2021_05_06_133110) do
+ActiveRecord::Schema[7.2].define(version: 2024_12_23_161547) do
   create_table "auth_tokens", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
     t.string "token"
     t.string "name"
