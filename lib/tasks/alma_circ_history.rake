@@ -20,8 +20,8 @@ namespace :alma_circ_history do
           next
         end
         loan = Loan.find_or_create_by(id: row["Item Loan Id"])
-        next if loan.return_date.present? || loan.checkout_date&.to_date&.to_fs(:db) == row["Loan Date"]
-
+        next if loan.return_date.present?
+        next if loan.checkout_date&.to_date&.to_fs(:db) == row["Loan Date"] && row["Return Date"].blank?
         # mrio: using `tap` so I can use block syntax
         loan.tap do |l|
           l.user = u

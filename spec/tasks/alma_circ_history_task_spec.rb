@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "alma_circ_history:load_history" do
+describe "alma_circ_history:load" do
   before(:each) do
     @pushgateway_stub = stub_request(:post, "#{ENV["PROMETHEUS_PUSH_GATEWAY"]}/metrics/job/checkout_history")
     @stub = stub_alma_get_request(url: "analytics/reports",
@@ -58,7 +58,7 @@ describe "alma_circ_history:load_history" do
   it "processes already loaded history that doesn't include a reutrn date where theres a new return date in the report" do
     user_ajones
     user_emcard
-    loan = create(:loan, id: "3159980960006381", title: "my_title", checkout_date: "2022-01-07")
+    loan = create(:loan, id: "3159980960006381", title: "my_title", checkout_date: "2020-01-07")
     expect(Loan.all.count).to eq(1)
     load_circ_history
     expect(Loan.all.count).to eq(2)
