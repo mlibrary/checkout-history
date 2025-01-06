@@ -13,7 +13,10 @@
 # it.
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
+require "webmock"
+require "alma_rest_client"
 RSpec.configure do |config|
+  include AlmaRestClient::Test::Helpers
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest
   # assertions if you prefer.
@@ -91,15 +94,4 @@ RSpec.configure do |config|
   #   # test failures related to randomization by passing the same `--seed` value
   #   # as the one that triggered the failure.
   #   Kernel.srand config.seed
-end
-def stub_alma_get_request(url:, body: "{}", status: 200, query: {})
-  stub_request(:get, "#{ENV["ALMA_API_HOST"]}/almaws/v1/#{url}").with(
-    headers: {
-      :accept => "application/json",
-      :Authorization => "apikey #{ENV["ALMA_API_KEY"]}",
-      "Accept-Encoding" => "gzip;q=1.0,deflate;q=0.6,identity;q=0.3",
-      "User-Agent" => "Ruby"
-    },
-    query: query
-  ).to_return(body: body, status: status, headers: {content_type: "application/json"})
 end
