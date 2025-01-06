@@ -1,11 +1,11 @@
 require "rails_helper"
 
-describe "alma_circ_history:load_history" do
+describe "alma_circ_history:load" do
   before(:each) do
     @pushgateway_stub = stub_request(:post, "#{ENV["PROMETHEUS_PUSH_GATEWAY"]}/metrics/job/checkout_history")
     @stub = stub_alma_get_request(url: "analytics/reports",
       query: {path: ENV.fetch("CIRC_REPORT_PATH"), col_names: true, limit: 1000},
-      body: File.read("./spec/fixtures/circ_history.json"))
+      output: File.read("./spec/fixtures/circ_history.json"))
   end
   after(:each) do
     Rake::Task["alma_circ_history:load"].reenable
@@ -22,8 +22,8 @@ describe "alma_circ_history:load_history" do
   it "logs an error if it can't load the report" do
     @stub.to_return(body: File.read("./spec/fixtures/alma_error.json"), status: 500, headers: {content_type: "application/json"})
     @stub.response # clear out original response
-    expect(Rails.logger).to receive(:error).with("Alma Report Failed to Load")
-    load_circ_history
+    expect(Rails.logger).to receive(:error).with(/Alma Report Failed to Load/)
+    expect { load_circ_history }.to raise_error SystemExit
   end
   it "loads new circ history into the db and downcases uniqnames" do
     user_ajones
@@ -58,7 +58,7 @@ describe "alma_circ_history:load_history" do
   it "processes already loaded history that doesn't include a reutrn date where theres a new return date in the report" do
     user_ajones
     user_emcard
-    loan = create(:loan, id: "3159980960006381", title: "my_title", checkout_date: "2022-01-07")
+    loan = create(:loan, id: "3159980960006381", title: "my_title", checkout_date: "2020-01-07")
     expect(Loan.all.count).to eq(1)
     load_circ_history
     expect(Loan.all.count).to eq(2)
@@ -144,7 +144,7 @@ describe "alma_circ_history:purge" do
   before(:each) do
     @stub = stub_alma_get_request(url: "analytics/reports",
       query: {path: ENV.fetch("PATRON_REPORT_PATH"), col_names: true, limit: 1000},
-      body: File.read("./spec/fixtures/non_expired_patrons.json"))
+      output: File.read("./spec/fixtures/non_expired_patrons.json"))
   end
   after(:each) do
     Rake::Task["alma_circ_history:purge"].reenable

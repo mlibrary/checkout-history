@@ -24,7 +24,7 @@ gem "yabeda-prometheus"
 
 gem "alma_rest_client",
   git: "https://github.com/mlibrary/alma_rest_client",
-  tag: "1.3.1"
+  tag: "v2.0.0"
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
